@@ -14,6 +14,7 @@ const moduleMap = {
     isNil: './src/isNil.ts',
     isArray: './src/isArray.ts',
     isObject: './src/isObject.ts',
+    has: './src/has.ts',
 } as const
 
 export default defineConfig({

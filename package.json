@@ -39,6 +39,12 @@
                 "types": "./dist/isObject.d.ts",
                 "default": "./dist/isObject.js"
             }
+        },
+        "./has": {
+            "import": {
+                "types": "./dist/has.d.ts",
+                "default": "./dist/has.js"
+            }
         }
     },
     "scripts": {
