@@ -5,35 +5,46 @@ function formatBenchmarkResults(input, commitId) {
     const lines = input.split('\n')
     const results = new Map()
     let currentTest = ''
-
     let isInSummary = false
+
+    // 각 테스트 결과를 직접 파싱
     for (const line of lines) {
-        if (line.includes('BENCH  Summary')) {
-            isInSummary = true
+        // 테스트 이름 추출
+        const testMatch = line.match(/✓\s+src\/([\w/]+)\.bench\.ts\s*>\s*(.*?)\s*performance/)
+        if (testMatch) {
+            const [_, file, testName] = testMatch
+            currentTest = {
+                name: testName.trim(),
+                file: `${file}.ts`,
+            }
             continue
         }
 
-        if (isInSummary && line.trim()) {
-            const testMatch = line.match(/\s+(hidash|lodash).*?src\/([\w/]+)\.bench\.ts\s*>\s*(.*?)\s*performance/)
-            if (testMatch) {
-                const [_, __, file, testName] = testMatch
-                currentTest = {
-                    name: testName.trim(),
-                    file: `${file}.ts`, // 원본 소스 파일
-                }
-                continue
-            }
+        // 결과 라인 찾기 ('fastest' 태그가 있는 라인)
+        if (line.includes('·') && line.includes('fastest')) {
+            if (!currentTest) continue
 
-            const resultMatch = line.match(/\s+([\d.]+)x faster than (hidash|lodash)/)
-            if (resultMatch && currentTest) {
-                const [_, ratio, loser] = resultMatch
-                results.set(currentTest.name, {
-                    test: currentTest.name,
-                    file: currentTest.file,
-                    winner: loser === 'hidash' ? 'lodash' : 'hidash',
-                    ratio,
-                    loser,
-                })
+            const parts = line.split(/\s+/).filter(Boolean)
+            const winnerHz = parseFloat(parts.find((p) => !isNaN(p)))
+            const winner = parts[2] // hidash 또는 lodash
+
+            // 다음 라인에서 비교 대상 찾기
+            const nextLineIndex = lines.indexOf(line) + 1
+            if (nextLineIndex < lines.length) {
+                const nextLine = lines[nextLineIndex]
+                if (nextLine.includes('·')) {
+                    const nextParts = nextLine.split(/\s+/).filter(Boolean)
+                    const loserHz = parseFloat(nextParts.find((p) => !isNaN(p)))
+                    const ratio = (winnerHz / loserHz).toFixed(2)
+
+                    results.set(currentTest.name, {
+                        test: currentTest.name,
+                        file: currentTest.file,
+                        winner: winner,
+                        ratio: ratio,
+                        loser: nextParts[2],
+                    })
+                }
             }
         }
     }
