@@ -30,14 +30,30 @@ jobs:
                       const fs = require('fs');
                       const output = process.env.OUTPUT;
 
-                      // Extract benchmark results
-                      const summaryMatches = output.matchAll(/(\w+(?:\s+\w+)?)\[2m - .+?\[22m[2m(.+?)[22m\s+[32m([\d.]+)x[39m [90mfaster than[39m (.+)/g);
-                      const summaryResults = [...summaryMatches].map(match => ({
-                        test: match[2].trim(),
-                        winner: match[1],
-                        ratio: match[3],
-                        loser: match[4]
-                      }));
+                      // Parse benchmark summary lines
+                      const benchmarkSummary = [];
+                      const lines = output.split('\n');
+                      let isInSummary = false;
+
+                      for (const line of lines) {
+                        if (line.includes('BENCH  Summary')) {
+                          isInSummary = true;
+                          continue;
+                        }
+
+                        if (isInSummary && line.trim() && !line.includes('BENCH')) {
+                          // Parse each summary line
+                          const match = line.match(/(\w+(?:\s+\w+)?).+?(\d+\.\d+)x faster than (.+)/);
+                          if (match) {
+                            benchmarkSummary.push({
+                              test: line.split('>')[1]?.split('performance')[0]?.trim() || 'Unknown Test',
+                              winner: match[1],
+                              ratio: match[2],
+                              loser: match[3].trim()
+                            });
+                          }
+                        }
+                      }
 
                       // Create markdown table
                       const markdownContent = [
@@ -45,7 +61,7 @@ jobs:
                         '',
                         '| Test | Winner | Speed Improvement |',
                         '|------|--------|------------------|',
-                        ...summaryResults.map(result =>
+                        ...benchmarkSummary.map(result =>
                           `| ${result.test} | ${result.winner} | ${result.ratio}x faster than ${result.loser} |`
                         ),
                         '',
