@@ -18,44 +18,67 @@ jobs:
               run: pnpm install --frozen-lockfile
 
             - name: Run benchmark
-              run: |
-                  pnpm bench > benchmark-output.txt 2>&1
+              run: pnpm bench > benchmark-output.txt 2>&1
 
+            - name: Verify benchmark output
+              run: |
                   echo "=== Benchmark Output ==="
                   cat benchmark-output.txt
+                  ls -l benchmark-output.txt
 
+            - name: Convert to markdown
+              run: |
                   node ./scripts/benchmark-to-md.mjs benchmark-output.txt ${{ github.event.pull_request.head.sha }} > benchmark-results.md
-
                   echo "=== Markdown Output ==="
                   cat benchmark-results.md
+                  ls -l benchmark-results.md
 
             - name: Post benchmark results as PR comment
               uses: actions/github-script@v6
               with:
                   script: |
                       const fs = await import('node:fs/promises');
-                      const markdownContent = await fs.readFile('benchmark-results.md', 'utf8') +
-                        '\n\n*Last updated by [GitHub Actions](https://github.com/' + process.env.GITHUB_REPOSITORY + '/actions/runs/' + process.env.GITHUB_RUN_ID + ')*';
 
-                      const { data: comments } = await github.rest.issues.listComments({
-                        ...context.repo,
-                        issue_number: context.payload.pull_request.number,
-                      });
+                      try {
+                        // 파일이 존재하는지 먼저 확인
+                        const files = await fs.readdir('.');
+                        console.log('Files in directory:', files);
 
-                      const existingComment = comments.find(comment =>
-                        comment.body.includes('### Benchmark Results')
-                      );
+                        const content = await fs.readFile('benchmark-results.md', 'utf8');
+                        if (!content.includes('### Benchmark Results')) {
+                          throw new Error('Invalid markdown content');
+                        }
 
-                      if (existingComment) {
-                        await github.rest.issues.updateComment({
-                          ...context.repo,
-                          comment_id: existingComment.id,
-                          body: markdownContent,
-                        });
-                      } else {
-                        await github.rest.issues.createComment({
+                        const finalContent = content +
+                          '\n\n*Last updated by [GitHub Actions](https://github.com/' +
+                          process.env.GITHUB_REPOSITORY + '/actions/runs/' +
+                          process.env.GITHUB_RUN_ID + ')*';
+
+                        const { data: comments } = await github.rest.issues.listComments({
                           ...context.repo,
                           issue_number: context.payload.pull_request.number,
-                          body: markdownContent,
                         });
+
+                        const existingComment = comments.find(comment =>
+                          comment.body.includes('### Benchmark Results')
+                        );
+
+                        if (existingComment) {
+                          await github.rest.issues.updateComment({
+                            ...context.repo,
+                            comment_id: existingComment.id,
+                            body: finalContent,
+                          });
+                          console.log('Updated existing comment:', existingComment.id);
+                        } else {
+                          const result = await github.rest.issues.createComment({
+                            ...context.repo,
+                            issue_number: context.payload.pull_request.number,
+                            body: finalContent,
+                          });
+                          console.log('Created new comment:', result.data.id);
+                        }
+                      } catch (error) {
+                        console.error('Error:', error);
+                        core.setFailed(`Action failed with error: ${error}`);
                       }
