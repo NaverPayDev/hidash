@@ -27,13 +27,37 @@ jobs:
               uses: actions/github-script@v6
               with:
                   script: |
-                      const benchmarkResults = process.env.OUTPUT;
+                      const fs = require('fs');
+                      const output = process.env.OUTPUT;
 
-                      const commentBody = [
+                      // Extract benchmark results
+                      const summaryMatches = output.matchAll(/(\w+(?:\s+\w+)?)\[2m - .+?\[22m[2m(.+?)[22m\s+[32m([\d.]+)x[39m [90mfaster than[39m (.+)/g);
+                      const summaryResults = [...summaryMatches].map(match => ({
+                        test: match[2].trim(),
+                        winner: match[1],
+                        ratio: match[3],
+                        loser: match[4]
+                      }));
+
+                      // Create markdown table
+                      const markdownContent = [
                         '### Benchmark Results',
-                        '<pre>',
-                        benchmarkResults,
-                        '</pre>',
+                        '',
+                        '| Test | Winner | Speed Improvement |',
+                        '|------|--------|------------------|',
+                        ...summaryResults.map(result =>
+                          `| ${result.test} | ${result.winner} | ${result.ratio}x faster than ${result.loser} |`
+                        ),
+                        '',
+                        '> Note: Higher numbers are better. Each number represents how many times faster the winner is.',
+                        '',
+                        '<details>',
+                        '<summary>View Full Benchmark Output</summary>',
+                        '',
+                        '```',
+                        output,
+                        '```',
+                        '</details>',
                         '',
                         '*Last updated by [GitHub Actions](https://github.com/' + process.env.GITHUB_REPOSITORY + '/actions)*'
                       ].join('\n');
@@ -51,12 +75,12 @@ jobs:
                         await github.rest.issues.updateComment({
                           ...context.repo,
                           comment_id: existingComment.id,
-                          body: commentBody,
+                          body: markdownContent,
                         });
                       } else {
                         await github.rest.issues.createComment({
                           ...context.repo,
                           issue_number: context.payload.pull_request.number,
-                          body: commentBody,
+                          body: markdownContent,
                         });
                       }
