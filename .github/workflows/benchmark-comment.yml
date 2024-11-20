@@ -15,7 +15,6 @@ jobs:
                   cache: 'pnpm'
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
-
             - name: Run benchmark
               run: pnpm bench | tee benchmark-output.txt
             - name: Post benchmark results as PR comment
@@ -32,7 +31,7 @@ jobs:
                         '*Last updated by [GitHub Actions](https://github.com/' + process.env.GITHUB_REPOSITORY + '/actions)*'
                       ].join('\n');
 
-                      const { data: comments } = await github.issues.listComments({
+                      const { data: comments } = await github.rest.issues.listComments({
                         ...context.repo,
                         issue_number: context.payload.pull_request.number,
                       });
@@ -42,13 +41,13 @@ jobs:
                       );
 
                       if (existingComment) {
-                        await github.issues.updateComment({
+                        await github.rest.issues.updateComment({
                           ...context.repo,
                           comment_id: existingComment.id,
                           body: commentBody,
                         });
                       } else {
-                        await github.issues.createComment({
+                        await github.rest.issues.createComment({
                           ...context.repo,
                           issue_number: context.payload.pull_request.number,
                           body: commentBody,
