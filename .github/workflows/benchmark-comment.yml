@@ -20,7 +20,14 @@ jobs:
             - name: Run benchmark
               run: |
                   pnpm bench > benchmark-output.txt 2>&1
+
+                  echo "=== Benchmark Output ==="
+                  cat benchmark-output.txt
+
                   node ./scripts/benchmark-to-md.mjs benchmark-output.txt ${{ github.event.pull_request.head.sha }} > benchmark-results.md
+
+                  echo "=== Markdown Output ==="
+                  cat benchmark-results.md
 
             - name: Post benchmark results as PR comment
               uses: actions/github-script@v6
