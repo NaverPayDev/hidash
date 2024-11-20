@@ -1,7 +1,8 @@
 name: Benchmark Comment on PR
 on:
     pull_request:
-
+        branches:
+            - main
 jobs:
     benchmark:
         runs-on: ubuntu-latest
@@ -16,18 +17,24 @@ jobs:
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
             - name: Run benchmark
-              run: pnpm bench | tee benchmark-output.txt
+              id: bench
+              run: |
+                  OUTPUT=$(pnpm bench)
+                  echo "OUTPUT<<EOF" >> $GITHUB_ENV
+                  echo "$OUTPUT" >> $GITHUB_ENV
+                  echo "EOF" >> $GITHUB_ENV
             - name: Post benchmark results as PR comment
               uses: actions/github-script@v6
               with:
                   script: |
-                      const fs = require('fs');
-                      const benchmarkResults = fs.readFileSync('benchmark-output.txt', 'utf8');
+                      const benchmarkResults = process.env.OUTPUT;
+
                       const commentBody = [
                         '### Benchmark Results',
-                        '```',
+                        '<pre>',
                         benchmarkResults,
-                        '```',
+                        '</pre>',
+                        '',
                         '*Last updated by [GitHub Actions](https://github.com/' + process.env.GITHUB_REPOSITORY + '/actions)*'
                       ].join('\n');
 
