@@ -3,6 +3,9 @@ import {describe, it, expect} from 'vitest'
 
 import {repeat} from './repeat'
 
+// eslint-disable-next-line no-console
+console.log(`일단 수정 갈겨`)
+
 describe('repeat', () => {
     it.concurrent.each([
         ['*', 3],
