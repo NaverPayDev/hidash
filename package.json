@@ -80,6 +80,16 @@
                 "default": "./every.js"
             }
         },
+        "./find": {
+            "import": {
+                "types": "./find.d.mts",
+                "default": "./find.mjs"
+            },
+            "require": {
+                "types": "./find.d.ts",
+                "default": "./find.js"
+            }
+        },
         "./findIndex": {
             "import": {
                 "types": "./findIndex.d.mts",
