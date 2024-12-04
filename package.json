@@ -499,6 +499,16 @@
                 "types": "./uniqBy.d.ts",
                 "default": "./uniqBy.js"
             }
+        },
+        "./uniqWith": {
+            "import": {
+                "types": "./uniqWith.d.mts",
+                "default": "./uniqWith.mjs"
+            },
+            "require": {
+                "types": "./uniqWith.d.ts",
+                "default": "./uniqWith.js"
+            }
         }
     },
     "scripts": {

@@ -50,6 +50,7 @@ const moduleMap = {
     toString: './src/toString.ts',
     uniq: './src/uniq.ts',
     uniqBy: './src/uniqBy.ts',
+    uniqWith: './src/uniqWith.ts',
 } as const
 
 export default moduleMap
