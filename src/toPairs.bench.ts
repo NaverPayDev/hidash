@@ -4,11 +4,11 @@ import {bench, describe} from 'vitest'
 import toPairs from './toPairs'
 
 const testCases = [
-    'a'.repeat(10000),
-    Array.from({length: 10000}, (_, i) => i),
-    Array.from({length: 10000}, (_, i) => [`key${i}`, {value: i, nested: {child: i * 2}}]),
-    new Map(Array.from({length: 10000}, (_, i) => [`key${i}`, `value${i}`])),
-    new Set(Array.from({length: 10000}, (_, i) => i)),
+    'a'.repeat(100),
+    Array.from({length: 100}, (_, i) => i),
+    Array.from({length: 100}, (_, i) => [`key${i}`, {value: i, nested: {child: i * 2}}]),
+    new Map(Array.from({length: 100}, (_, i) => [`key${i}`, `value${i}`])),
+    new Set(Array.from({length: 100}, (_, i) => i)),
 ]
 
 const ITERATIONS = 1000

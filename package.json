@@ -480,6 +480,16 @@
                 "default": "./toString.js"
             }
         },
+        "./trim": {
+            "import": {
+                "types": "./trim.d.mts",
+                "default": "./trim.mjs"
+            },
+            "require": {
+                "types": "./trim.d.ts",
+                "default": "./trim.js"
+            }
+        },
         "./uniq": {
             "import": {
                 "types": "./uniq.d.mts",
