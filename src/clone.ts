@@ -54,3 +54,5 @@ export function clone<T>(value: T): T {
 
     return {} as T
 }
+
+export default clone

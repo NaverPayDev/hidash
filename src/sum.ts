@@ -3,8 +3,6 @@
  */
 export function sum(elements: number[]): number {
     let result = 0
-    // for-of is slower than indexed for loop
-    // eslint-disable-next-line
     for (let i = 0; i < elements.length; i++) {
         result += elements[i]
     }

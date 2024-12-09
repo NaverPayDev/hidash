@@ -1,7 +1,15 @@
 {
     "extends": "@naverpay/eslint-config",
+    "plugins": ["hidash"],
     "rules": {
         "@typescript-eslint/naming-convention": ["off"],
-        "@typescript-eslint/prefer-for-of": ["off"]
+        "@typescript-eslint/prefer-for-of": ["off"],
+        "hidash/enforce-single-function-dual-export": [
+            "error",
+            {
+                "include": ["src/*.ts"],
+                "exclude": ["src/index.ts", "**/*.bench.ts", "**/*.test.ts"]
+            }
+        ]
     }
 }
