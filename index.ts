@@ -12,6 +12,7 @@ const moduleMap = {
     findIndex: './src/findIndex.ts',
     findLastIndex: './src/findLastIndex.ts',
     first: './src/first.ts',
+    flow: './src/flow.ts',
     groupBy: './src/groupBy.ts',
     gt: './src/gt.ts',
     has: './src/has.ts',

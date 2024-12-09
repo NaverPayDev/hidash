@@ -120,6 +120,16 @@
                 "default": "./first.js"
             }
         },
+        "./flow": {
+            "import": {
+                "types": "./flow.d.mts",
+                "default": "./flow.mjs"
+            },
+            "require": {
+                "types": "./flow.d.ts",
+                "default": "./flow.js"
+            }
+        },
         "./groupBy": {
             "import": {
                 "types": "./groupBy.d.mts",
