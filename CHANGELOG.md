@@ -1,5 +1,25 @@
 # @naverpay/hidash
 
+## 0.1.6
+
+### Patch Changes
+
+-   fa6f7b2: 🚀 trim
+
+    PR: [🚀 trim](https://github.com/NaverPayDev/hidash/pull/156)
+
+-   412b2dc: 🐛 add missing default export of clone
+
+    PR: [create hidash/enforce-single-function-dual-export](https://github.com/NaverPayDev/hidash/pull/155)
+
+-   266f606: 🚀 flow
+
+    PR: [🚀 flow](https://github.com/NaverPayDev/hidash/pull/158)
+
+-   f50b156: 🚀 uniqWith
+
+    PR: [🚀 uniqWith](https://github.com/NaverPayDev/hidash/pull/149)
+
 ## 0.1.5
 
 ### Patch Changes
