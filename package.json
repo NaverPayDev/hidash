@@ -150,6 +150,16 @@
                 "default": "./flow.js"
             }
         },
+        "./get": {
+            "import": {
+                "types": "./get.d.mts",
+                "default": "./get.mjs"
+            },
+            "require": {
+                "types": "./get.d.ts",
+                "default": "./get.js"
+            }
+        },
         "./groupBy": {
             "import": {
                 "types": "./groupBy.d.mts",
