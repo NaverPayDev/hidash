@@ -1,3 +1,5 @@
+import isArray from './isArray'
+
 const rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]/g
 const reEscapeChar = /\\(\\)?/g
 const pathCache = new Map<string, (string | number)[]>()
@@ -43,7 +45,7 @@ function complexStringToPath(path: string): (string | number)[] {
 }
 
 function castPath(path: string | symbol | (string | number)[]): (string | number | symbol)[] {
-    if (Array.isArray(path)) {
+    if (isArray(path)) {
         return path
     }
     if (typeof path === 'symbol') {
