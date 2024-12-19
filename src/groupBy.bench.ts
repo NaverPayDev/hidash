@@ -51,6 +51,34 @@ const complexTestCases = [
     },
 ] as const
 
+// 패턴(객체, [key,value]) 기반 iteratee 테스트 케이스 추가
+const patternTestCases = [
+    {
+        data: [
+            {id: 1, category: 'A', name: 'Foo'},
+            {id: 2, category: 'B', name: 'Bar'},
+            {id: 3, category: 'A', name: 'Baz'},
+        ],
+        iteratee: {category: 'A'} as const,
+    },
+    {
+        data: [
+            {id: 1, category: 'A', name: 'Foo'},
+            {id: 2, category: 'B', name: 'Bar'},
+            {id: 3, category: 'A', name: 'Baz'},
+        ],
+        iteratee: ['category', 'B'] as const,
+    },
+    {
+        data: [
+            {user: {age: 25, level: 'junior'}},
+            {user: {age: 25, level: 'senior'}},
+            {user: {age: 30, level: 'junior'}},
+        ],
+        iteratee: {user: {age: 25}} as const,
+    },
+] as const
+
 const largeArray = Array.from({length: 10000}, (_, i) => ({
     id: i,
     category: String.fromCharCode(65 + (i % 26)),
@@ -61,38 +89,36 @@ const largeArray = Array.from({length: 10000}, (_, i) => ({
 
 describe('groupBy performance comparison', () => {
     bench('hidash', () => {
-        // Basic test cases
         basicTestCases.forEach(({data, iteratee}) => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
             groupBy(data, iteratee)
         })
 
-        // Complex test cases
         complexTestCases.forEach(({data, iteratee}) => {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
             groupBy(data, iteratee)
         })
 
-        // Large array tests
+        patternTestCases.forEach(({data, iteratee}) => {
+            groupBy(data, iteratee)
+        })
+
         groupBy(largeArray, 'category')
         groupBy(largeArray, (item) => item.tags[0])
         groupBy(largeArray, (item) => item.nested.level)
     })
 
     bench('lodash', () => {
-        // Basic test cases
         basicTestCases.forEach(({data, iteratee}) => {
             _groupBy(data, iteratee)
         })
 
-        // Complex test cases
         complexTestCases.forEach(({data, iteratee}) => {
             _groupBy(data, iteratee)
         })
 
-        // Large array tests
+        patternTestCases.forEach(({data, iteratee}) => {
+            _groupBy(data, iteratee)
+        })
+
         _groupBy(largeArray, 'category')
         _groupBy(largeArray, (item) => item.tags[0])
         _groupBy(largeArray, (item) => item.nested.level)
