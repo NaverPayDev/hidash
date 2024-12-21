@@ -3,7 +3,6 @@ import {describe, it, expect} from 'vitest'
 
 import {groupBy} from './groupBy'
 
-// 테스트용 데이터
 const users = [
     {id: 1, name: 'John', age: 25, city: 'NY'},
     {id: 2, name: 'Jane', age: 25, city: 'LA'},
@@ -87,6 +86,16 @@ describe('complex scenarios', () => {
         const iteratee = (item) => item.tags[0]
         expect(groupBy(data, iteratee)).toEqual(_groupBy(data, iteratee))
     })
+
+    it('should handle nested object paths using string notation', () => {
+        const data = [
+            {insurance: {type: 'health', value: 100}},
+            {insurance: {type: 'life', value: 200}},
+            {insurance: {type: 'health', value: 300}},
+        ]
+
+        expect(groupBy(data, 'insurance.type')).toEqual(_groupBy(data, (item) => item.insurance.type))
+    })
 })
 
 describe('performance cases', () => {
@@ -103,11 +112,7 @@ describe('performance cases', () => {
 
 describe('error cases', () => {
     it('should handle invalid iteratee paths', () => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         expect(groupBy(users, 'nonexistent')).toEqual(_groupBy(users, 'nonexistent'))
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         expect(groupBy(users, '')).toEqual(_groupBy(users, ''))
     })
 
@@ -136,6 +141,38 @@ describe('type safety', () => {
         expect(groupBy(typedUsers, 'age')).toEqual(_groupBy(typedUsers, 'age'))
         expect(groupBy(typedUsers, (user) => (user.age >= 30 ? 'senior' : 'junior'))).toEqual(
             _groupBy(typedUsers, (user) => (user.age >= 30 ? 'senior' : 'junior')),
+        )
+    })
+})
+
+describe('lodash groupBy with undefined', () => {
+    it('should use "undefined" as a key when iteratee returns undefined', () => {
+        const data = [1, 2, 3]
+        expect(groupBy(data, () => undefined)).toEqual(_groupBy(data, () => undefined))
+    })
+
+    it('should handle undefined values in collection', () => {
+        const data = [1, undefined, 3]
+        expect(groupBy(data)).toEqual(_groupBy(data))
+    })
+})
+
+describe('pattern iteratees', () => {
+    it('should group by object pattern', () => {
+        expect(groupBy(users, {age: 25})).toEqual(_groupBy(users, {age: 25}))
+    })
+
+    it('should group by array [key, value] pattern', () => {
+        expect(groupBy(users, ['city', 'NY'])).toEqual(_groupBy(users, ['city', 'NY']))
+    })
+
+    it('should group by nested object pattern', () => {
+        const data = [{user: {age: 25, name: 'A'}}, {user: {age: 25, name: 'B'}}, {user: {age: 30, name: 'C'}}]
+
+        expect(groupBy(data, {user: {age: 25}})).toEqual(
+            _groupBy(data, (item) => {
+                return item.user && item.user.age === 25
+            }),
         )
     })
 })

@@ -1,76 +1,47 @@
-type PropertyName = string | number
+import {isArrayLike} from './internal/array'
+import {baseIteratee, ValueIteratee} from './internal/baseIteratee'
+import isPlainObject from './isPlainObject'
 
-export function groupBy<T>(
-    collection: T[] | null | undefined,
-    iteratee: ((value: T) => PropertyName) | keyof NonNullable<T>,
-): Record<string, T[]>
+type PropertyName = string | number | symbol
+
+export function groupBy<T>(collection: T[] | null | undefined, iteratee?: ValueIteratee<T>): Record<string, T[]>
 export function groupBy<T extends object>(
     collection: T | null | undefined,
-    iteratee?: ((value: T[keyof T]) => PropertyName) | keyof T[keyof T],
+    iteratee?: ValueIteratee<T[keyof T]>,
 ): Record<string, T[keyof T][]>
-export function groupBy(collection: unknown, iteratee: unknown = String): Record<string, unknown[]> {
-    if (!collection) {
+export function groupBy(collection: unknown, iteratee?: ValueIteratee<unknown>): Record<string, unknown[]> {
+    if (collection == null) {
         return {}
     }
 
+    const iterFn = baseIteratee(iteratee ?? ((v: unknown) => v))
     const result: Record<string, unknown[]> = {}
 
-    if (Array.isArray(collection)) {
-        const len = collection.length
-        let i = 0
-
-        if (typeof iteratee === 'function') {
-            for (; i < len; i++) {
-                const item = collection[i]
-                const key = item === undefined ? 'undefined' : iteratee(item)
-                ;(result[key] || (result[key] = [])).push(item)
-            }
-            return result
-        }
-
-        for (; i < len; i++) {
-            const item = collection[i]
-
-            if (item == null) {
-                ;(result.undefined || (result.undefined = [])).push(item)
-                continue
-            }
-
-            const value = (item as Record<string, unknown>)[iteratee as string]
-            const key = value == null ? 'undefined' : String(value)
-            ;(result[key] || (result[key] = [])).push(item)
+    if (isArrayLike(collection)) {
+        const arr = collection as ArrayLike<unknown>
+        for (let i = 0; i < arr.length; i++) {
+            const value = arr[i]
+            const key = iterFn(value, i, arr)
+            const stringKey = key == null ? 'undefined' : String(key)
+            const group = result[stringKey] || (result[stringKey] = [])
+            group.push(value)
         }
         return result
     }
 
-    // 객체 처리
-    const entries = Object.entries(collection as object)
-    const len = entries.length
-    let i = 0
-
-    if (typeof iteratee === 'function') {
-        for (; i < len; i++) {
-            const item = entries[i][1]
-            const key = item === undefined ? 'undefined' : iteratee(item)
-            ;(result[key] || (result[key] = [])).push(item)
+    if (isPlainObject(collection)) {
+        const values = Object.values(collection as Record<PropertyName, unknown>)
+        for (let i = 0; i < values.length; i++) {
+            const value = values[i]
+            const key = iterFn(value, i, values)
+            const stringKey = key == null ? 'undefined' : String(key)
+            const group = result[stringKey] || (result[stringKey] = [])
+            group.push(value)
         }
         return result
     }
 
-    for (; i < len; i++) {
-        const item = entries[i][1]
-
-        if (item == null) {
-            ;(result.undefined || (result.undefined = [])).push(item)
-            continue
-        }
-
-        const value = (item as Record<string, unknown>)[iteratee as string]
-        const key = value == null ? 'undefined' : String(value)
-        ;(result[key] || (result[key] = [])).push(item)
-    }
-
-    return result
+    return {}
 }
 
 export default groupBy
