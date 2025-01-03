@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});function r(t,n=1){if(!t||n<1)return[];const l=Math.max(Math.floor(n),1),u=t.length,o=new Array(Math.ceil(u/l));let c=0;for(let e=0;e<u;e+=l)o[c++]=t.slice(e,e+l);return o}exports.chunk=r;exports.default=r;

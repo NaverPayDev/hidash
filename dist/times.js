@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});function s(t,i){if(!Number.isInteger(t)||t<1||t>=Number.MAX_SAFE_INTEGER)return[];const r=t,u=new Array(r);if(i)for(let e=0;e<r;e++)u[e]=i(e);else for(let e=0;e<r;e++)u[e]=e;return u}exports.default=s;exports.times=s;

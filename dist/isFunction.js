@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});const i=require("./isObject.js");function t(e){return i.isObject(e)?typeof e=="function":!1}exports.default=t;exports.isFunction=t;

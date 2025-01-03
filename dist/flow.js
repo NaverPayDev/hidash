@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});function r(...e){return(...o)=>{let t=e[0](...o);for(let l=1;l<e.length;l++)t=e[l](t);return t}}exports.default=r;exports.flow=r;

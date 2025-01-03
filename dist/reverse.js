@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});const t=require("core-js-pure/features/instance/reverse.js");function e(r){return t(Array.prototype).call(r)}exports.default=e;exports.reverse=e;

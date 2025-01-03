@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});const d=require("./internal/baseIteratee.js");function r(t,o,s){const n=t.length;if(!n)return-1;const i=s!==void 0?s:n-1,u=Math.max(i>=0?i:n+i,0),a=d.baseIteratee(o);let e=u+1;for(;e--;)if(a(t[e],e,t))return e;return-1}exports.default=r;exports.findLastIndex=r;

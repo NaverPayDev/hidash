@@ -693,7 +693,7 @@
     },
     "scripts": {
         "prepare": "lefthook install -f",
-        "build": "pnpm run clean && vite build --config vite.config.mts && pnpm run build:dts",
+        "build": "pnpm run clean && vite build --config vite.config.mts",
         "release": "changeset publish",
         "build:dts": "tsup --config tsup.config.ts",
         "clean": "rm -rf dist",
@@ -721,6 +721,7 @@
         "@naverpay/editorconfig": "^0.0.4",
         "@naverpay/eslint-config": "^1.0.7",
         "@naverpay/markdown-lint": "^0.0.3",
+        "@naverpay/pite": "^0.0.5",
         "@naverpay/prettier-config": "^1.0.0",
         "@rollup/plugin-babel": "^6.0.4",
         "@types/lodash": "^4.17.13",

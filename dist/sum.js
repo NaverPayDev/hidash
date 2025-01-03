@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});function l(t){let u=0;for(let e=0;e<t.length;e++)u+=t[e];return u}exports.default=l;exports.sum=l;

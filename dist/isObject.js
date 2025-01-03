@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});function o(e){const t=typeof e;return!!e&&(t==="object"||t==="function")}exports.default=o;exports.isObject=o;

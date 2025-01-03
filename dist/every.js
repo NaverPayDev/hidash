@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});function n(t,l=Boolean){if(!t)return!0;const r=Object.values(t),u=r.length;if(u===0)return!0;for(let e=0;e<u;e++)if(!l(r[e],e,t))return!1;return!0}exports.default=n;exports.every=n;

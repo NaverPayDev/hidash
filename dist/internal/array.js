@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});function n(t){return typeof t=="number"&&t>-1&&t%1===0&&t<=Number.MAX_SAFE_INTEGER}function r(t){return t!=null&&typeof t!="function"&&n(t.length)}exports.isArrayLike=r;exports.isLength=n;

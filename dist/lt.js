@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});const r=require("./isNumber.js"),u=require("./toNumber.js");function i(t,e){if(typeof t=="string"&&typeof e=="string")return t<e;const s=r.isNumber(t)?t:u.toNumber(t),n=r.isNumber(e)?e:u.toNumber(e);return s<n}exports.default=i;exports.lt=i;

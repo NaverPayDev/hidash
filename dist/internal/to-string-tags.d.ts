@@ -1,0 +1,11 @@
+export declare const STRING_TAG = "[string String]";
+export declare const STRING_OBJECT_TAG = "[object String]";
+export declare const WEAK_MAP_TAG = "[object WeakMap]";
+export declare const WEAK_SET_TAG = "[object WeakSet]";
+export declare const FUNCTION_TAG = "[object Function]";
+export declare const NUMBER_OBJECT_TAG = "[object Number]";
+export declare const SYMBOL_TAG = "[object Symbol]";
+export declare const DATE_TAG = "[object Date]";
+export declare const REGEXP_TAG = "[object RegExp]";
+export declare const MAP_TAG = "[object Map]";
+export declare const SET_TAG = "[object Set]";

@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});function l(t,i,s){const[a,e]=s===void 0?[void 0,i]:[i,s];if(isNaN(t))return NaN;const c=a!=null?a:t,N=e!=null?e:t;return isNaN(c)||isNaN(N)?0:Math.min(Math.max(t,c),N)}exports.clamp=l;exports.default=l;

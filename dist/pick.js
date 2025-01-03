@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});const l=require("./flatten.js");function r(e,...u){if(e==null)return{};const i=l.flatten(u),n={};for(const t of i)t in e&&(n[t]=e[t]);return n}exports.default=r;exports.pick=r;

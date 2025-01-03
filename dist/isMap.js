@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});const r=require("./internal/to-string-tags.js");function e(t){return Object.prototype.toString.call(t)===r.MAP_TAG}exports.default=e;exports.isMap=e;

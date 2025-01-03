@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});const i=require("core-js-pure/features/instance/push.js");function l(...u){const e=[],s=new Map;for(let t=0;t<u.length;t++){const n=u[t];if(n)for(let o=0;o<n.length;o++){const r=n[o];s.has(r)||(s.set(r,!0),i(e).call(e,r))}}return e}exports.default=l;exports.union=l;

@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});const i=require("./toNumber.js");function t(e,o,...r){if(typeof e!="function")throw new TypeError("Expected a function");const u=setTimeout(()=>e(...r),o);return i.toNumber(u)}exports.default=t;exports.delay=t;

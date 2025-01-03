@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});const r=require("./before.js");function e(o){return r.before(2,o)}exports.default=e;exports.once=e;

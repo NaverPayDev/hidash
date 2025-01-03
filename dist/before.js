@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});function r(i,e){if(typeof e!="function")throw new TypeError("Expected a function");let t,o=Math.floor(i);return function(...n){return--o>0&&(t=e.apply(this,n)),o<=1&&(e=void 0),t}}exports.before=r;exports.default=r;

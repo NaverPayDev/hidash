@@ -1,0 +1,1 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});function t(e,o){return e?Array.prototype.join.call(e,o):""}exports.default=t;exports.join=t;
