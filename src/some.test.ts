@@ -3,7 +3,7 @@ import {describe, it, expect} from 'vitest'
 
 import {some} from './some'
 
-import type {ListIterateeCustom} from './internal/baseIteratee'
+import type {ListIterateeCustom} from './internal/baseIteratee.type'
 import type {Collection} from './internal/types'
 
 function compareResults<T>(collection: Collection<T> | null | undefined, predicate?: ListIterateeCustom<T, boolean>) {

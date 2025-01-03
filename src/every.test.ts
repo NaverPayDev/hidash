@@ -44,4 +44,18 @@ describe('every', () => {
             expect(typeof value).toBe('number')
         })
     })
+
+    it('should handle object arrays with property name', () => {
+        expect(every([{name: 'jj'}, {name: 'bb'}], 'name')).toBe(_every([{name: 'jj'}, {name: 'bb'}], 'name'))
+    })
+
+    it('should handle empty objects', () => {
+        expect(every({})).toBe(_every({}))
+        expect(every({}, (v) => !!v)).toBe(_every({}, (v) => !!v))
+    })
+
+    it('should handle empty arrays', () => {
+        expect(every([])).toBe(_every([]))
+        expect(every([], (v) => !!v)).toBe(_every([], (v) => !!v))
+    })
 })

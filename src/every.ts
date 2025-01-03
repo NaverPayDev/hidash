@@ -1,3 +1,5 @@
+import {baseIteratee} from './internal/baseIteratee'
+
 import type {ListIterateeCustom, ObjectIterateeCustom} from './internal/baseIteratee.type'
 import type {List} from './internal/types'
 
@@ -21,10 +23,12 @@ export function every<T, U extends T[keyof T]>(
         return true
     }
 
+    const iteratee = baseIteratee<unknown, boolean>(predicate)
+
     for (let i = 0; i < length; i++) {
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        if (!predicate(values[i], i, collection)) {
+        if (!iteratee(values[i], i, collection)) {
             return false
         }
     }
