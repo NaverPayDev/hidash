@@ -9,7 +9,7 @@ const NAN = NaN // Number.isNaN(0/0) true
 
 const reIsBadHex = /^[-+]0x[0-9a-f]+$/i
 const reIsBinary = /^0b[01]+$/i
-const reIsOctal = /^0o[0-7]+$/i
+const reIsOctal = /^0o[0-7]+$/i // temp
 const freeParseInt = Number.parseInt
 
 export function toNumber(value: unknown): number {
