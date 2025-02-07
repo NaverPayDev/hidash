@@ -10,7 +10,7 @@ export function times<TResult>(n: number, iteratee?: (num: number) => TResult): 
 
     if (iteratee) {
         for (let i = 0; i < nTimes; i++) {
-            result[i] = iteratee(i)
+            result[i] = iteratee(i) // temp
         }
     } else {
         for (let i = 0; i < nTimes; i++) {
