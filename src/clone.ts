@@ -20,7 +20,7 @@ export function clone<T>(value: T): T {
 
     if (ArrayBuffer.isView(value) && !(value instanceof DataView)) {
         const TypedArrayConstructor = value.constructor as new (buffer: ArrayBuffer) => ArrayBufferView
-        return new TypedArrayConstructor(value.buffer.slice(0)) as T
+        return new TypedArrayConstructor(value.buffer.slice(0) as ArrayBuffer) as T
     }
 
     if (value instanceof ArrayBuffer) {

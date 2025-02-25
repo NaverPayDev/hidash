@@ -13,7 +13,11 @@
         "internal/*.d.ts",
         "internal/*.d.mts"
     ],
+    "main": "./assign.mjs",
+    "module": "./assign.mjs",
+    "types": "./assign.d.mts",
     "exports": {
+        "./package.json": "./package.json",
         "./assign": {
             "import": {
                 "types": "./assign.d.mts",
@@ -755,7 +759,7 @@
         "@naverpay/editorconfig": "^0.0.4",
         "@naverpay/eslint-config": "^1.0.7",
         "@naverpay/markdown-lint": "^0.0.3",
-        "@naverpay/pite": "^0.0.6",
+        "@naverpay/pite": "1.1.0",
         "@naverpay/prettier-config": "^1.0.0",
         "@rollup/plugin-babel": "^6.0.4",
         "@types/lodash": "^4.17.13",
