@@ -4,8 +4,17 @@ import moduleMap from './index'
 
 export default createViteConfig({
     cwd: '.',
-    formats: ['cjs', 'es'],
-    entry: moduleMap,
+    entry: ['!./src/**/*.bench.ts', '!./src/**/*.test.ts', './src/**/*.ts'],
+    outputs: [
+        {
+            format: 'cjs',
+            dist: 'dist',
+        },
+        {
+            format: 'es',
+            dist: 'dist',
+        },
+    ],
     allowedPolyfills: [
         'es.array.push', // https://bugs.chromium.org/p/v8/issues/detail?id=12681
         'es.array.includes', // https://bugzilla.mozilla.org/show_bug.cgi?id=1767541
