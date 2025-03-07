@@ -1,0 +1,43 @@
+name: Benchmark Comment on PR One Time
+
+on:
+    workflow_dispatch:
+        inputs:
+            pr_number:
+                description: 'PR number to run benchmark on'
+                required: false
+                type: number
+
+permissions:
+    pull-requests: write
+
+jobs:
+    benchmark:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.sha || github.sha }}
+
+            - name: Fetch base branch
+              run: git fetch origin $GITHUB_BASE_REF
+
+            - uses: pnpm/action-setup@v4
+
+            - name: Use Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: '20'
+                  cache: 'pnpm'
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Run benchmarks
+              uses: NaverPayDev/benchmark-actions@main
+              with:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  PACKAGE_MANAGER: 'pnpm'
+                  TARGET: 'comment'
+                  SOURCE_ROOT: 'src'
+                  PR_NUMBER: ${{ github.event.inputs.pr_number }}
