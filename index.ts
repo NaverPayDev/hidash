@@ -58,6 +58,7 @@ const moduleMap = {
     size: './src/size.ts',
     sleep: './src/sleep.ts',
     some: './src/some.ts',
+    sortBy: './src/sortBy.ts',
     sum: './src/sum.ts',
     sumBy: './src/sumBy.ts',
     throttle: './src/throttle.ts',
@@ -72,6 +73,7 @@ const moduleMap = {
     uniqBy: './src/uniqBy.ts',
     uniqWith: './src/uniqWith.ts',
     values: './src/values.ts',
+    zip: './src/zip.ts',
 } as const
 
 export default moduleMap
