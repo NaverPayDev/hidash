@@ -14,27 +14,36 @@ jobs:
         permissions:
             pull-requests: write
         steps:
-            - uses: actions/checkout@v4
+            - name: Checkout PR Head
+              uses: actions/checkout@v4
               with:
-                  fetch-depth:
+                  ref: ${{ github.event.pull_request.head.ref }}
+                  repository: ${{ github.event.pull_request.head.repo.full_name }}
+                  fetch-depth: 0
+
+            # Node/Pnpm 세팅
             - uses: pnpm/action-setup@v4
+
             - name: Use Node.js
               uses: actions/setup-node@v4
               with:
                   node-version: '20'
                   cache: 'pnpm'
+
             - name: Install dependencies
               run: pnpm install --frozen-lockfile
+
             - name: Generate Expected Config
               run: node scripts/generate-utils.mjs
+
             - name: Check and Comment Changes
               uses: actions/github-script@v7
               with:
                   script: |
                       const { execSync } = require('child_process');
 
-                      const indexDiff = execSync('git diff origin/main -- index.ts').toString();
-                      const packageDiff = execSync('git diff origin/main -- package.json').toString();
+                      const indexDiff = execSync('git diff --name-only index.ts').toString().trim();
+                      const packageDiff = execSync('git diff --name-only package.json').toString().trim();
 
                       const hasChanges = indexDiff || packageDiff;
                       const prNumber = context.payload.pull_request.number;
@@ -52,6 +61,7 @@ jobs:
                         });
 
                         process.exit(1);
+
                       } else {
                         const successMessage = '✅ All utility modules are properly registered';
 
@@ -62,9 +72,11 @@ jobs:
                         });
 
                         const botComment = comments.data.find(comment =>
-                          comment.user.type === 'Bot' &&
-                          (comment.body.includes('Module Registration Issue Detected') ||
-                           comment.body.includes('All utility modules are properly registered'))
+                          comment.user.login === 'github-actions[bot]' &&
+                          (
+                            comment.body.includes('Module Registration Issue Detected') ||
+                            comment.body.includes('All utility modules are properly registered')
+                          )
                         );
 
                         if (botComment) {
