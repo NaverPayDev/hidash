@@ -15,6 +15,8 @@ jobs:
             pull-requests: write
         steps:
             - uses: actions/checkout@v4
+              with:
+                  fetch-depth:
             - uses: pnpm/action-setup@v4
             - name: Use Node.js
               uses: actions/setup-node@v4
@@ -31,8 +33,8 @@ jobs:
                   script: |
                       const { execSync } = require('child_process');
 
-                      const indexDiff = execSync('git diff index.ts').toString();
-                      const packageDiff = execSync('git diff package.json').toString();
+                      const indexDiff = execSync('git diff origin/main -- index.ts').toString();
+                      const packageDiff = execSync('git diff origin/main -- package.json').toString();
 
                       const hasChanges = indexDiff || packageDiff;
                       const prNumber = context.payload.pull_request.number;
