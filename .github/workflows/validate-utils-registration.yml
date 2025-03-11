@@ -21,7 +21,12 @@ jobs:
                   repository: ${{ github.event.pull_request.head.repo.full_name }}
                   fetch-depth: 0
 
-            # Node/Pnpm 세팅
+            - name: Configure Git
+              run: |
+                  git config --global core.autocrlf false
+                  git config --global core.eol lf
+                  git config --global core.fileMode false
+
             - uses: pnpm/action-setup@v4
 
             - name: Use Node.js
@@ -36,19 +41,31 @@ jobs:
             - name: Generate Expected Config
               run: node scripts/generate-utils.mjs
 
+            - name: 'Debug:Show diff/stats (optional)'
+              run: |
+                  echo "=== GIT STATUS BEFORE DIFF ==="
+                  git --no-pager status
+
+                  echo "=== DIFF (index.ts) ==="
+                  git --no-pager diff --stat index.ts
+
+                  echo "=== DIFF (package.json) ==="
+                  git --no-pager diff --stat package.json
+
             - name: Check and Comment Changes
               uses: actions/github-script@v7
               with:
                   script: |
                       const { execSync } = require('child_process');
 
-                      const indexDiff = execSync('git diff --name-only index.ts').toString().trim();
-                      const packageDiff = execSync('git diff --name-only package.json').toString().trim();
+                      const indexDiff = execSync('git diff --ignore-cr-at-eol --name-only index.ts').toString().trim();
+                      const packageDiff = execSync('git diff --ignore-cr-at-eol --name-only package.json').toString().trim();
 
                       const hasChanges = indexDiff || packageDiff;
                       const prNumber = context.payload.pull_request.number;
 
                       if (hasChanges) {
+                        // 변경 있음
                         let message = '### ⚠️ Module Registration Issue Detected\n\n';
                         message += 'Please run this command locally and commit the changes:\n```bash\npnpm generate\n```\n\n';
                         message += 'This will ensure all utility modules are properly registered in both index.ts and package.json';
@@ -63,6 +80,7 @@ jobs:
                         process.exit(1);
 
                       } else {
+                        // 변경 없음
                         const successMessage = '✅ All utility modules are properly registered';
 
                         const comments = await github.rest.issues.listComments({
