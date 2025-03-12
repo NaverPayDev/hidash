@@ -1,5 +1,5 @@
 export function test() {
-    return 1
+    return 2
 }
 
 export default test
