@@ -604,6 +604,16 @@
                 "default": "./sumBy.js"
             }
         },
+        "./test": {
+            "import": {
+                "types": "./test.d.mts",
+                "default": "./test.mjs"
+            },
+            "require": {
+                "types": "./test.d.ts",
+                "default": "./test.js"
+            }
+        },
         "./throttle": {
             "import": {
                 "types": "./throttle.d.mts",
