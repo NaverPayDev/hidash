@@ -604,6 +604,16 @@
                 "default": "./sumBy.js"
             }
         },
+        "./test": {
+            "import": {
+                "types": "./test.d.mts",
+                "default": "./test.mjs"
+            },
+            "require": {
+                "types": "./test.d.ts",
+                "default": "./test.js"
+            }
+        },
         "./throttle": {
             "import": {
                 "types": "./throttle.d.mts",
@@ -722,6 +732,16 @@
             "require": {
                 "types": "./values.d.ts",
                 "default": "./values.js"
+            }
+        },
+        "./zip": {
+            "import": {
+                "types": "./zip.d.mts",
+                "default": "./zip.mjs"
+            },
+            "require": {
+                "types": "./zip.d.ts",
+                "default": "./zip.js"
             }
         }
     },

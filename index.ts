@@ -60,6 +60,7 @@ const moduleMap = {
     some: './src/some.ts',
     sum: './src/sum.ts',
     sumBy: './src/sumBy.ts',
+    test: './src/test.ts',
     throttle: './src/throttle.ts',
     times: './src/times.ts',
     toNumber: './src/toNumber.ts',
@@ -72,6 +73,7 @@ const moduleMap = {
     uniqBy: './src/uniqBy.ts',
     uniqWith: './src/uniqWith.ts',
     values: './src/values.ts',
+    zip: './src/zip.ts',
 } as const
 
 export default moduleMap
