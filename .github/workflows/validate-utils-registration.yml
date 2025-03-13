@@ -14,17 +14,18 @@ permissions:
 jobs:
     check-utils:
         runs-on: ubuntu-latest
-        permissions:
-            pull-requests: write
         steps:
-            - uses: actions/checkout@v4
+            - name: Check out PR head
+              uses: actions/checkout@v4
               with:
                   ref: ${{ github.event.pull_request.head.sha }}
+                  fetch-depth: 0
 
             - name: Fetch base branch
-              run: git fetch origin $GITHUB_BASE_REF
+              run: git fetch origin ${{ github.event.pull_request.base.ref }}
 
-            - uses: pnpm/action-setup@v4
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v4
 
             - name: Use Node.js
               uses: actions/setup-node@v4
@@ -38,76 +39,94 @@ jobs:
             - name: Generate Utils
               run: node scripts/generate-utils.mjs
 
-            - name: Debug diff
+            - name: Debug local diff after generate
               run: |
                   echo "=== index.ts diff ==="
                   git diff -- index.ts
                   echo "=== package.json diff ==="
                   git diff -- package.json
 
-            - name: Check and Comment Changes
+            - name: Check for leftover changes
+              run: |
+                  git diff --exit-code index.ts package.json
+
+            - name: Post failure comment
+              if: failure()
               uses: actions/github-script@v7
               with:
                   script: |
-                      const { execSync } = require('child_process');
-                      const baseRef = process.env.GITHUB_BASE_REF;
-
-                      const indexDiff = execSync(`git diff origin/${baseRef} index.ts`).toString();
-                      const packageDiff = execSync(`git diff origin/${baseRef} package.json`).toString();
-
-                      if (indexDiff.trim()) {
-                            console.log('=== index.ts diff ===');
-                            console.log(indexDiff);
-                        }
-                        if (packageDiff.trim()) {
-                            console.log('=== package.json diff ===');
-                            console.log(packageDiff);
-                        }
-
-                      const hasChanges = indexDiff || packageDiff;
                       const prNumber = context.payload.pull_request.number;
+                      const { data: allComments } = await github.rest.issues.listComments({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: prNumber,
+                      });
 
-                      if (hasChanges) {
-                        let message = '### ⚠️ Module Registration Issue Detected\n\n';
-                        message += 'Please run this command locally and commit the changes:\n```bash\npnpm generate\n```\n\n';
-                        message += 'This will ensure all utility modules are properly registered in both index.ts and package.json';
+                      const warningMsg = "### ⚠️ Module Registration Issue Detected\n\n"
+                        + "It looks like there are unregistered or mismatched modules in `package.json` exports or `index.ts`. "
+                        + "Please run the following commands locally to update and commit:\n\n"
+                        + "```bash\n"
+                        + "pnpm generate\n"
+                        + "git commit -am \"fix: update utils\"\n"
+                        + "git push\n"
+                        + "```\n";
 
+                      const existingBotComment = allComments.find(comment =>
+                        (
+                          comment.body.includes('Module Registration Issue Detected') ||
+                          comment.body.includes('All utility modules are properly registered')
+                        )
+                      );
+
+                      if (existingBotComment) {
+                        await github.rest.issues.updateComment({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          comment_id: existingBotComment.id,
+                          body: warningMsg,
+                        });
+                      } else {
                         await github.rest.issues.createComment({
                           owner: context.repo.owner,
                           repo: context.repo.repo,
                           issue_number: prNumber,
-                          body: message
+                          body: warningMsg,
                         });
+                      }
 
-                        process.exit(1);
-                      } else {
-                        const successMessage = '✅ All utility modules are properly registered';
+            - name: Post success comment
+              if: success()
+              uses: actions/github-script@v7
+              with:
+                  script: |
+                      const prNumber = context.payload.pull_request.number;
+                      const { data: allComments } = await github.rest.issues.listComments({
+                        owner: context.repo.owner,
+                        repo: context.repo.repo,
+                        issue_number: prNumber,
+                      });
 
-                        const comments = await github.rest.issues.listComments({
+                      const successMsg = "✅ All utility modules are properly registered in `index.ts` and `package.json` exports!";
+
+                      const existingBotComment = allComments.find(comment =>
+                        (
+                          comment.body.includes('Module Registration Issue Detected') ||
+                          comment.body.includes('All utility modules are properly registered')
+                        )
+                      );
+
+                      if (existingBotComment) {
+                        await github.rest.issues.updateComment({
                           owner: context.repo.owner,
                           repo: context.repo.repo,
-                          issue_number: prNumber
+                          comment_id: existingBotComment.id,
+                          body: successMsg,
                         });
-
-                        const botComment = comments.data.find(comment =>
-                          comment.user.type === 'Bot' &&
-                          (comment.body.includes('Module Registration Issue Detected') ||
-                            comment.body.includes('All utility modules are properly registered'))
-                        );
-
-                        if (botComment) {
-                          await github.rest.issues.updateComment({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            comment_id: botComment.id,
-                            body: successMessage
-                          });
-                        } else {
-                          await github.rest.issues.createComment({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            issue_number: prNumber,
-                            body: successMessage
-                          });
-                        }
+                      } else {
+                        await github.rest.issues.createComment({
+                          owner: context.repo.owner,
+                          repo: context.repo.repo,
+                          issue_number: prNumber,
+                          body: successMsg,
+                        });
                       }
