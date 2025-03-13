@@ -214,6 +214,16 @@
                 "default": "./gt.js"
             }
         },
+        "./handsome": {
+            "import": {
+                "types": "./handsome.d.mts",
+                "default": "./handsome.mjs"
+            },
+            "require": {
+                "types": "./handsome.d.ts",
+                "default": "./handsome.js"
+            }
+        },
         "./has": {
             "import": {
                 "types": "./has.d.mts",

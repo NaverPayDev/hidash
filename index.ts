@@ -21,6 +21,7 @@ const moduleMap = {
     flow: './src/flow.ts',
     groupBy: './src/groupBy.ts',
     gt: './src/gt.ts',
+    handsome: './src/handsome.ts',
     has: './src/has.ts',
     identity: './src/identity.ts',
     includes: './src/includes.ts',
