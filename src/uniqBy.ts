@@ -11,8 +11,9 @@ export function uniqBy<T>(array: List<T> | null | undefined, iteratee: ValueIter
     const seen = new Map<unknown, boolean>()
     const result: T[] = []
     const iterateeFn = baseIteratee(iteratee)
+    const arrayLength = array.length
 
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0; i < arrayLength; i++) {
         const value = array[i]
         const computed = iterateeFn(value, i, array)
 

@@ -11,7 +11,8 @@ export function shuffle<T>(collection: Collection<T> | null | undefined): T[] {
     if (collection instanceof Map) {
         result = []
         const entries = Array.from(collection.entries())
-        for (let i = 0; i < entries.length; i++) {
+        const entriesLength = entries.length
+        for (let i = 0; i < entriesLength; i++) {
             result.push(entries[i][0] as unknown as T)
             result.push(entries[i][1] as T)
         }

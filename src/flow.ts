@@ -44,7 +44,8 @@ export function flow<TArgs extends unknown[]>(
 ): Func<TArgs, unknown> {
     return (...args: TArgs) => {
         let result: unknown = funcs[0](...args)
-        for (let i = 1; i < funcs.length; i++) {
+        const funcLength = funcs.length
+        for (let i = 1; i < funcLength; i++) {
             result = funcs[i](result)
         }
         return result

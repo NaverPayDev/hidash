@@ -19,7 +19,8 @@ export function omit<T extends object>(object: T | null | undefined, ...paths: P
         }
     }
 
-    for (let i = 0; i < flattenedPaths.length; i++) {
+    const size = flattenedPaths.length
+    for (let i = 0; i < size; i++) {
         delete result[flattenedPaths[i] as keyof T]
     }
 

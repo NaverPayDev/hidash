@@ -30,10 +30,11 @@ function hasPath(object: unknown, path: PropertyPath): boolean {
     }
 
     const pathArray = isKey(path, object) ? [path as string] : castPath(path)
+    const pathArrayLength = pathArray.length
 
     let currentObject: unknown = object
 
-    for (let i = 0; i < pathArray.length; i++) {
+    for (let i = 0; i < pathArrayLength; i++) {
         const key = pathArray[i]
 
         if (

@@ -3,7 +3,8 @@
  */
 export function sum(elements: number[]): number {
     let result = 0
-    for (let i = 0; i < elements.length; i++) {
+    const elementLength = elements.length
+    for (let i = 0; i < elementLength; i++) {
         result += elements[i]
     }
     return result

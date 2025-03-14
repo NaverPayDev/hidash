@@ -1,11 +1,13 @@
 export function union<T>(...arrays: (T[] | null | undefined)[]): T[] {
     const result: T[] = []
     const seen = new Map<T, boolean>()
+    const arrayLength = arrays.length
 
-    for (let i = 0; i < arrays.length; i++) {
+    for (let i = 0; i < arrayLength; i++) {
         const array = arrays[i]
         if (array) {
-            for (let j = 0; j < array.length; j++) {
+            const length = array.length
+            for (let j = 0; j < length; j++) {
                 const item = array[j]
                 if (!seen.has(item)) {
                     seen.set(item, true)

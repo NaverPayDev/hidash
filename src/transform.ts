@@ -14,7 +14,8 @@ export function transform<T extends readonly unknown[] | Record<PropertyKey, unk
 
     if (isArr) {
         const arr = obj as unknown[]
-        for (let i = 0; i < arr.length; i++) {
+        const size = arr.length
+        for (let i = 0; i < size; i++) {
             const key = i as Keys<T>
             const value = arr[i] as ValueOf<T>
             const result = iteratee(acc, value, key, obj)

@@ -21,7 +21,8 @@ export function groupBy(collection: unknown, iteratee?: ValueIteratee<unknown>):
 
     if (isArrayLike(collection)) {
         const arr = collection as ArrayLike<unknown>
-        for (let i = 0; i < arr.length; i++) {
+        const arrLength = arr.length
+        for (let i = 0; i < arrLength; i++) {
             const value = arr[i]
             const key = iterFn(value, i, arr)
             const stringKey = key == null ? 'undefined' : String(key)
@@ -33,7 +34,8 @@ export function groupBy(collection: unknown, iteratee?: ValueIteratee<unknown>):
 
     if (isPlainObject(collection)) {
         const values = Object.values(collection as Record<PropertyName, unknown>)
-        for (let i = 0; i < values.length; i++) {
+        const valuesLength = values.length
+        for (let i = 0; i < valuesLength; i++) {
             const value = values[i]
             const key = iterFn(value, i, values)
             const stringKey = key == null ? 'undefined' : String(key)

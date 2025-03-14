@@ -4,9 +4,11 @@ export function difference<T>(array: ArrayLike<T> | null | undefined, ...values:
     }
 
     const toExclude = new Set<T>()
-    for (let i = 0; i < values.length; i++) {
+    const valueLength = values.length
+    for (let i = 0; i < valueLength; i++) {
         const val = values[i]
-        for (let j = 0; j < val.length; j++) {
+        const valLength = val.length
+        for (let j = 0; j < valLength; j++) {
             toExclude.add(val[j])
         }
     }

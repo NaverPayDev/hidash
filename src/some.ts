@@ -35,7 +35,8 @@ export function some<T>(
     if (isArrayLike(collection)) {
         const arrayLike = collection as ArrayLike<T>
 
-        for (let i = 0; i < collection.length; i++) {
+        const collectionLength = collection.length
+        for (let i = 0; i < collectionLength; i++) {
             if (iteratee(arrayLike[i], i, arrayLike)) {
                 return true
             }

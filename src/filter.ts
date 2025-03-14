@@ -43,7 +43,8 @@ export function filter<T>(collection: T, predicate?: unknown) {
     if (isArrayLike(collection)) {
         const arrayLike = collection as ArrayLike<T>
 
-        for (let index = 0; index < collection.length; index++) {
+        const collectionLength = collection.length
+        for (let index = 0; index < collectionLength; index++) {
             const value = arrayLike[index]
             if ((iteratee as ListIterator<T, boolean>)(value, index, collection)) {
                 result.push(value)
