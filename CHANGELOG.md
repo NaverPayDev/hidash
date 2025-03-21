@@ -1,5 +1,17 @@
 # @naverpay/hidash
 
+## 0.2.2
+
+### Patch Changes
+
+-   3b736b8: 🚀 unzip
+
+    PR: [🚀 unzip](https://github.com/NaverPayDev/hidash/pull/238)
+
+-   3632944: length check one time
+
+    PR: [length check one time](https://github.com/NaverPayDev/hidash/pull/240)
+
 ## 0.2.1
 
 ### Patch Changes
