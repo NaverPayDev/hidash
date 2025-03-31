@@ -14,6 +14,7 @@
         "internal/*.d.mts"
     ],
     "exports": {
+        "./package.json": "./package.json",
         "./assign": {
             "import": {
                 "types": "./assign.d.mts",
@@ -749,7 +750,6 @@
         "prepare": "lefthook install -f",
         "build": "pnpm run clean && vite build --config vite.config.mts",
         "release": "changeset publish",
-        "build:dts": "tsup --config tsup.config.ts",
         "clean": "rm -rf dist",
         "lint": "eslint '**/*.{js,jsx,ts,tsx}'",
         "lint:fix": "eslint '**/*.{js,jsx,ts,tsx}' --fix",
@@ -775,7 +775,7 @@
         "@naverpay/editorconfig": "^0.0.4",
         "@naverpay/eslint-config": "^1.0.7",
         "@naverpay/markdown-lint": "^0.0.3",
-        "@naverpay/pite": "^0.0.6",
+        "@naverpay/pite": "2.1.0",
         "@naverpay/prettier-config": "^1.0.0",
         "@rollup/plugin-babel": "^6.0.4",
         "@types/lodash": "^4.17.13",
@@ -789,7 +789,6 @@
         "rimraf": "^5.0.10",
         "rollup": "^4.24.3",
         "rollup-preserve-directives": "^1.1.2",
-        "tsup": "^8.3.6",
         "vite": "^6.1.1",
         "vitest": "^3.0.6"
     },
