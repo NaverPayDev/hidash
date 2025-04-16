@@ -9,7 +9,7 @@ import isString from './isString'
 export function toPairs<Value, Key = Value>(
     object?: AnyKindOfDictionary<Value> | object | Map<Key, Value> | Set<Value>,
 ): [Key, Value][] {
-    if (!object || isEmpty(object)) {
+    if (!object) {
         return []
     }
 
@@ -19,6 +19,10 @@ export function toPairs<Value, Key = Value>(
 
     if (isArray(object)) {
         return object.map((value, index) => [String(index) as unknown as Key, value as Value])
+    }
+
+    if (isEmpty(object)) {
+        return []
     }
 
     if (isPlainObject(object)) {
