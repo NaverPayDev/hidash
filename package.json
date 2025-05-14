@@ -144,6 +144,16 @@
                 "default": "./filter.js"
             }
         },
+        "./find": {
+            "import": {
+                "types": "./find.d.mts",
+                "default": "./find.mjs"
+            },
+            "require": {
+                "types": "./find.d.ts",
+                "default": "./find.js"
+            }
+        },
         "./findIndex": {
             "import": {
                 "types": "./findIndex.d.mts",
@@ -192,6 +202,16 @@
             "require": {
                 "types": "./flow.d.ts",
                 "default": "./flow.js"
+            }
+        },
+        "./get": {
+            "import": {
+                "types": "./get.d.mts",
+                "default": "./get.mjs"
+            },
+            "require": {
+                "types": "./get.d.ts",
+                "default": "./get.js"
             }
         },
         "./groupBy": {
