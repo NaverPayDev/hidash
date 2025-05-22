@@ -14,6 +14,7 @@
         "internal/*.d.mts"
     ],
     "exports": {
+        "./package.json": "./package.json",
         "./assign": {
             "import": {
                 "types": "./assign.d.mts",
@@ -788,7 +789,7 @@
     },
     "author": "yc.effort@navercorp.com",
     "license": "MIT",
-    "packageManager": "pnpm@9.14.3",
+    "packageManager": "pnpm@10.10.0",
     "devDependencies": {
         "@changesets/cli": "^2.27.9",
         "@naverpay/editorconfig": "^0.0.4",
