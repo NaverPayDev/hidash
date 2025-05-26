@@ -1,5 +1,19 @@
 # @naverpay/hidash
 
+## 0.3.0
+
+### Minor Changes
+
+-   a32abe0: Add get, find functions
+
+    PR: [add get, find](https://github.com/NaverPayDev/hidash/pull/243)
+
+### Patch Changes
+
+-   105bf36: repeat: Update repeat function to handle MAX_SAFE_INTEGER edge cases for `n`
+
+    PR: [repeat: Update repeat function to handle MAX_SAFE_INTEGER edge cases for `n`](https://github.com/NaverPayDev/hidash/pull/255)
+
 ## 0.2.3
 
 ### Patch Changes
