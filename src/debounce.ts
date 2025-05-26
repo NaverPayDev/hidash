@@ -5,7 +5,27 @@ interface DebounceOptions {
 }
 
 /**
- * @see https://unpkg.com/lodash.debounce@4.0.8/index.js
+ * @description
+ * Creates a debounced function that delays invoking `func` until after `waitMilliseconds`
+ * have elapsed since the last time the debounced function was invoked.
+ * The debounced function comes with a `cancel` method to cancel delayed `func`
+ * invocations and a `flush` method to immediately invoke them. Provide `options`
+ * to indicate whether `func` should be invoked on the leading and/or trailing edge of
+ * the `waitMilliseconds` timeout. The `func` is invoked with the last arguments provided to the
+ * debounced function. Subsequent calls to the debounced function return the result of
+ * the last `func` invocation.
+ *
+ * As a utility within @naverpay/hidash, the primary focus of this implementation
+ * is on providing a **TypeScript-native utility** with strong type safety,
+ * rather than pursuing specific performance optimizations over the original Lodash version.
+ *
+ * @param {Function} func - The function to debounce.
+ * @param {number} [waitMilliseconds=0] - The number of milliseconds to delay.
+ * @param {Object} [options={}] - The options object.
+ * @param {boolean} [options.leading=false] - Specify invoking on the leading edge of the timeout.
+ * @param {number} [options.maxWait] - The maximum time `func` is allowed to be delayed before it's invoked.
+ * @param {boolean} [options.trailing=true] - Specify invoking on the trailing edge of the timeout.
+ * @returns {{debounce: Function, cancel: Function, flush: Function}} An object containing the debounced function, a cancel function, and a flush function.
  */
 export function debounce<Args extends unknown[]>(
     func: (...args: Args) => unknown,
@@ -30,13 +50,16 @@ export function debounce<Args extends unknown[]>(
         return setTimeout(pendingFunc, wait)
     }
 
+    // Calculate remaining wait time considering maxWait.
     const remainingWait = (time: number) => {
         const timeSinceLastCall = time - (lastCallTime as number)
         const timeSinceLastInvoke = time - lastInvokeTime
         const timeWaiting = waitMilliseconds - timeSinceLastCall
+
         return maxWait === undefined ? timeWaiting : Math.min(timeWaiting, maxWait - timeSinceLastInvoke)
     }
 
+    // Check if it's time to invoke.
     const shouldInvoke = (time: number) => {
         if (lastCallTime === null) {
             return true
@@ -45,13 +68,13 @@ export function debounce<Args extends unknown[]>(
         const timeSinceLastInvoke = time - lastInvokeTime
 
         return (
-            lastCallTime === null ||
             timeSinceLastCall >= waitMilliseconds ||
-            timeSinceLastCall < 0 ||
+            timeSinceLastCall < 0 || // Handle system time changes.
             (maxWait !== undefined && timeSinceLastInvoke >= maxWait)
         )
     }
 
+    // Handle trailing edge invocation.
     const trailingEdge = (time: number) => {
         timeoutId = null
         if (trailing && lastArgs) {
@@ -61,14 +84,17 @@ export function debounce<Args extends unknown[]>(
         return result
     }
 
+    // Function called when timer expires.
     const timerExpired = () => {
         const time = Date.now()
         if (shouldInvoke(time)) {
             return trailingEdge(time)
         }
+        // Restart timer with remaining wait time.
         timeoutId = startTimer(timerExpired, remainingWait(time))
     }
 
+    // Handle leading edge invocation.
     const leadingEdge = (time: number) => {
         lastInvokeTime = time
         timeoutId = startTimer(timerExpired, waitMilliseconds)
@@ -89,12 +115,12 @@ export function debounce<Args extends unknown[]>(
                 return leadingEdge(lastCallTime)
             }
             if (maxWait !== undefined) {
-                timeoutId = startTimer(timerExpired, remainingWait(time))
+                timeoutId = startTimer(timerExpired, waitMilliseconds)
                 return invokeFunc(lastCallTime)
             }
         }
         if (timeoutId === null) {
-            timeoutId = startTimer(timerExpired, remainingWait(time))
+            timeoutId = startTimer(timerExpired, waitMilliseconds)
         }
         return result
     }
