@@ -15,10 +15,6 @@ interface DebounceOptions {
  * debounced function. Subsequent calls to the debounced function return the result of
  * the last `func` invocation.
  *
- * As a utility within @naverpay/hidash, the primary focus of this implementation
- * is on providing a **TypeScript-native utility** with strong type safety,
- * rather than pursuing specific performance optimizations over the original Lodash version.
- *
  * @param {Function} func - The function to debounce.
  * @param {number} [waitMilliseconds=0] - The number of milliseconds to delay.
  * @param {Object} [options={}] - The options object.
@@ -115,12 +111,12 @@ export function debounce<Args extends unknown[]>(
                 return leadingEdge(lastCallTime)
             }
             if (maxWait !== undefined) {
-                timeoutId = startTimer(timerExpired, waitMilliseconds)
+                timeoutId = startTimer(timerExpired, remainingWait(time))
                 return invokeFunc(lastCallTime)
             }
         }
         if (timeoutId === null) {
-            timeoutId = startTimer(timerExpired, waitMilliseconds)
+            timeoutId = startTimer(timerExpired, remainingWait(time))
         }
         return result
     }
