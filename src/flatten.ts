@@ -21,6 +21,13 @@ function baseFlatten<T>(array: List<Many<T>>, depth: number = 1, result?: T[]): 
     return flattenResult as T[]
 }
 
+/**
+ * @description
+ * Flattens a nested array a single level deep.
+ *
+ * @param {List<Many<T>>|null|undefined} array The array to flatten.
+ * @returns {T[]} Returns the new flattened array.
+ */
 export function flatten<T>(array: List<Many<T>> | null | undefined): T[] {
     if (array === null || array === undefined) {
         return []
