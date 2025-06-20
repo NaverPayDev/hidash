@@ -1,0 +1,9 @@
+{
+    "protect": ["main", "master", "develop"],
+    "rules": {
+        "repo": null,
+        "feature": null,
+        "feat": null,
+        "epic": null
+    }
+}
