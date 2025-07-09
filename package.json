@@ -605,6 +605,16 @@
                 "default": "./some.js"
             }
         },
+        "./sortBy": {
+            "import": {
+                "types": "./sortBy.d.mts",
+                "default": "./sortBy.mjs"
+            },
+            "require": {
+                "types": "./sortBy.d.ts",
+                "default": "./sortBy.js"
+            }
+        },
         "./sum": {
             "import": {
                 "types": "./sum.d.mts",
