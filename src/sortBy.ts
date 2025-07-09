@@ -42,6 +42,15 @@ function compareValues(a: unknown, b: unknown): number {
     return 0
 }
 
+/**
+ * @description
+ * Sort in ascending order
+ *
+ * @template T - The type of the function to restrict.
+ * @param {List<T>} [collection] The collection to iterate over
+ * @param {ListIteratee<T | (value: T) => un} [iteratees] Sort by property or function.
+ * @returns {List<T>} Returns the new sorted array.
+ */
 export function sortBy<T>(collection: T[], ...iteratees: Iteratees<T>[]): T[] {
     if (!collection) {
         return []
