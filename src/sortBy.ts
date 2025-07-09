@@ -1,15 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-type Value = string | number | undefined | null | boolean
-type FnType<T> = (item: T) => Value
-type Iteratee<T> = FnType<T> | Value
+type FnType<T> = (item: T) => unknown
+type Iteratee<T> = FnType<T> | keyof T
 
 type Iteratees<T> = Iteratee<T> | Iteratee<T>[]
 
 const convertValues = function <T>(iteratees: Iteratees<T>[]) {
-    const baseIteratee: FnType<T> = (v) => v as Value
     let result: Iteratee<T>[] = []
+    const baseIteratee: FnType<T> = (v) => v
+    const list = iteratees.length ? iteratees : [baseIteratee]
 
-    for (const iteratee of iteratees.length ? iteratees : [baseIteratee]) {
+    for (const iteratee of list) {
         if (Array.isArray(iteratee)) {
             result = result.concat(iteratee)
         } else {
@@ -20,8 +19,7 @@ const convertValues = function <T>(iteratees: Iteratees<T>[]) {
         if (typeof fn === 'function') {
             return fn
         }
-        const key = fn as any
-        return ((item: any) => item[key]) as FnType<T>
+        return (item: T) => item[fn]
     })
 }
 
@@ -53,10 +51,9 @@ export function sortBy<T>(collection: T[], ...iteratees: Iteratees<T>[]): T[] {
     const valuesLength = getValues.length
 
     return collection
-        .map((value, index) => {
+        .map((value) => {
             return {
                 origin: value,
-                index,
                 values: getValues.map((fn) => fn(value)),
             }
         })
