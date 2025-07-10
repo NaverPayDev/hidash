@@ -60,6 +60,7 @@ const moduleMap = {
     size: './src/size.ts',
     sleep: './src/sleep.ts',
     some: './src/some.ts',
+    sortBy: './src/sortBy.ts',
     sum: './src/sum.ts',
     sumBy: './src/sumBy.ts',
     throttle: './src/throttle.ts',
