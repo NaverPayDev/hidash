@@ -23,4 +23,5 @@ export default createViteConfig({
         'es.regexp.flags', // https://github.com/zloirock/core-js/commit/9017066b4cb367c6609e4473d43d6e6dad8031a5#diff-59f90be4cf68f9d13d2dce1818780ae968bf48328da4014b47138adf527ec0fcR1066
         'es.array.reverse', // https://bugs.webkit.org/show_bug.cgi?id=188794
     ],
+    skipRequiredPolyfillCheck: ['es.array.sort'],
 })

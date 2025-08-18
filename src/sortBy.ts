@@ -1,0 +1,82 @@
+type FnType<T> = (item: T) => unknown
+type Iteratee<T> = FnType<T> | keyof T
+
+type Iteratees<T> = Iteratee<T> | Iteratee<T>[]
+
+const convertValues = function <T>(iteratees: Iteratees<T>[]) {
+    let result: Iteratee<T>[] = []
+    const baseIteratee: FnType<T> = (v) => v
+    const list = iteratees.length ? iteratees : [baseIteratee]
+
+    for (const iteratee of list) {
+        if (Array.isArray(iteratee)) {
+            result = result.concat(iteratee)
+        } else {
+            result.push(iteratee)
+        }
+    }
+    return result.map((fn): FnType<T> => {
+        if (typeof fn === 'function') {
+            return fn
+        }
+        return (item: T) => item[fn]
+    })
+}
+
+function compareValues(a: unknown, b: unknown): number {
+    if (!(a == null) && !(b == null)) {
+        if (a > b) {
+            return 1
+        }
+        if (a < b) {
+            return -1
+        }
+    }
+    if (a == null) {
+        return 1
+    }
+    if (b == null) {
+        return -1
+    }
+
+    return 0
+}
+
+/**
+ * @description
+ * Sort in ascending order
+ *
+ * @template T - The type of the function to restrict.
+ * @param {List<T>} [collection] The collection to iterate over
+ * @param {ListIteratee<T | (value: T) => un} [iteratees] Sort by property or function.
+ * @returns {List<T>} Returns the new sorted array.
+ */
+export function sortBy<T>(collection: T[], ...iteratees: Iteratees<T>[]): T[] {
+    if (!collection) {
+        return []
+    }
+
+    const getValues = convertValues(iteratees)
+    const valuesLength = getValues.length
+
+    return collection
+        .map((value) => {
+            return {
+                origin: value,
+                values: getValues.map((fn) => fn(value)),
+            }
+        })
+        .sort((a, b) => {
+            for (let i = 0; i < valuesLength; i++) {
+                const c = compareValues(a.values[i], b.values[i])
+                if (c !== 0) {
+                    return c
+                }
+            }
+
+            return 0
+        })
+        .map(({origin}) => origin)
+}
+
+export default sortBy
