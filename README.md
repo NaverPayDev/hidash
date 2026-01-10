@@ -4,7 +4,7 @@
 
 A modern, performance-focused alternative to Lodash.
 
-## Features
+## Features 
 
 -   🚀 **Dual Package Support (CJS, ESM)**: Built for modern JavaScript, optimized for tree-shaking
 -   ⚡️ **High Performance**: Consistently faster than Lodash in benchmarks (verified with Vitest)
