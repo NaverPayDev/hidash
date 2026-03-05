@@ -1,5 +1,13 @@
 # @naverpay/hidash
 
+## 1.1.0
+
+### Minor Changes
+
+- 7907708: add sortBy
+
+    PR: [add sortBy](https://github.com/NaverPayDev/hidash/pull/282)
+
 ## 1.0.0
 
 ### Major Changes
