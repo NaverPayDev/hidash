@@ -29,11 +29,36 @@ export function isEqual(value: unknown, other: unknown) {
     }
 
     if (typeof value === 'object' && value !== null && typeof other === 'object' && other !== null) {
-        const valueObject = value as Record<string, unknown>
-        const otherObject = other as Record<string, unknown>
-        if (Object.getPrototypeOf(valueObject) !== Object.getPrototypeOf(otherObject)) {
+        if (Object.getPrototypeOf(value) !== Object.getPrototypeOf(other)) {
             return false
         }
+
+        if (value instanceof Map && other instanceof Map) {
+            if (value.size !== other.size) {
+                return false
+            }
+            for (const [k, v] of value) {
+                if (!other.has(k) || !isEqual(v, other.get(k))) {
+                    return false
+                }
+            }
+            return true
+        }
+
+        if (value instanceof Set && other instanceof Set) {
+            if (value.size !== other.size) {
+                return false
+            }
+            for (const v of value) {
+                if (!other.has(v)) {
+                    return false
+                }
+            }
+            return true
+        }
+
+        const valueObject = value as Record<string, unknown>
+        const otherObject = other as Record<string, unknown>
 
         const valueKeys = Object.keys(valueObject)
         const otherKeys = Object.keys(otherObject)
