@@ -19,14 +19,12 @@ jobs:
         if: github.event_name == 'issue_comment' && github.event.issue.pull_request && (github.event.comment.body == 'canary-publish' || github.event.comment.body == '/canary-publish' || github.event.comment.body == 'rc-publish' || github.event.comment.body == '/rc-publish')
         runs-on: ubuntu-latest
         outputs:
-            branch: ${{ steps.get_branch.outputs.branch }}
+            ref: ${{ steps.get_ref.outputs.ref }}
         steps:
-            - name: Get PR branch name
-              id: get_branch
+            - name: Get PR ref
+              id: get_ref
               run: |
-                  PR=$(curl -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" ${{ github.event.issue.pull_request.url }})
-                  branch=$(echo "$PR" | jq -r '.head.ref')
-                  echo "branch=$branch" >> "$GITHUB_OUTPUT"
+                  echo "ref=refs/pull/${{ github.event.issue.number }}/merge" >> "$GITHUB_OUTPUT"
 
     publish:
         runs-on: ubuntu-latest
@@ -39,7 +37,7 @@ jobs:
             - name: Checkout Repo
               uses: actions/checkout@v4
               with:
-                  ref: ${{ needs.get-branch.outputs.branch || github.ref }}
+                  ref: ${{ needs.get-branch.outputs.ref || github.ref }}
                   token: ${{ secrets.ACTION_TOKEN }}
                   fetch-depth: 0
 
