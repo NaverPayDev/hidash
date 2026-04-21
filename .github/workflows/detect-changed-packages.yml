@@ -39,3 +39,4 @@ jobs:
                   skip_label: skip-detect-change
                   skip_branches: main
                   formatting_script: pnpm run markdownlint:fix
+                  fork_guide_enabled: true
