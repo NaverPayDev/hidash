@@ -1,5 +1,11 @@
 # @naverpay/hidash
 
+## 1.1.1
+
+### Patch Changes
+
+- 50ccea7: fix(isEqual): support deep equality for Map and Set instances
+
 ## 1.1.0
 
 ### Minor Changes
