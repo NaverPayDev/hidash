@@ -72,11 +72,10 @@ Latest benchmark results comparing hidash vs lodash performance.
 | [zip](https://github.com/NaverPayDev/hidash/blob/main/src/zip.ts) | src/zip.bench.ts > zip performance | hidash is 1.14x faster | 49.01 🏆 | 43.09 |
 
 > Note: Higher operations per second (ops/sec) numbers are better. Each test compares hidash vs lodash implementation.
-> 
+>
 > ⚠️ indicates where hidash is slower than lodash.
-> 
+>
 > 🏆 indicates the faster implementation.
-
 
 _Last updated: 2026-03-05_
 

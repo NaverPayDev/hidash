@@ -1,0 +1,127 @@
+# @naverpay/hidash
+
+> A modern, zero-dependency, performance-focused drop-in replacement for Lodash. 100% behavior-compatible with Lodash, written in TypeScript with full type definitions, and shipped as dual CJS/ESM with subpath imports for optimal tree-shaking.
+
+## Installation
+
+```bash
+npm install @naverpay/hidash
+# or
+pnpm add @naverpay/hidash
+# or
+yarn add @naverpay/hidash
+```
+
+## Usage
+
+Each utility is exported via a dedicated subpath. Namespace imports are **not supported**.
+
+```typescript
+import has from '@naverpay/hidash/has'
+import isEmpty from '@naverpay/hidash/isEmpty'
+import debounce from '@naverpay/hidash/debounce'
+
+has({a: {b: 1}}, 'a.b')   // true
+isEmpty([])               // true
+const fn = debounce(() => {}, 200)
+```
+
+The following will **not** work:
+
+```typescript
+import {has, isEmpty} from '@naverpay/hidash' // ❌ namespace imports are not supported
+```
+
+Each subpath provides both a default export and a named export, with matching CJS (`*.js`, `*.d.ts`) and ESM (`*.mjs`, `*.d.mts`) artifacts.
+
+## Design Principles
+
+- **Behavior-compatible with Lodash.** Every utility is asserted against the real `lodash` implementation in tests; edge cases match Lodash exactly.
+- **Performance >= Lodash.** Each utility ships with a benchmark verifying parity or improvement.
+- **Zero runtime dependencies.** `lodash` is only a devDependency for compatibility testing.
+- **Tree-shakable by construction.** One file per utility means bundlers only pull what you import.
+
+## API
+
+- `assign`: Assigns the values of all enumerable properties from one or more source objects to a target object.
+- `before`: Creates a function that invokes `func` as long as it's called less than `initialN` times.
+- `chunk`: Creates an array of elements split into groups the length of `size`.
+- `clamp`: Clamps `number` within inclusive bounds.
+- `clone`: Creates a shallow clone of `value`.
+- `cloneDeep`: Creates a deep clone of `value`.
+- `debounce`: Creates a debounced function that delays invoking `func` until after `waitMilliseconds` have elapsed since the last time the debounced function was invoked.
+- `delay`: Invokes `func` after `wait` milliseconds.
+- `difference`: Creates an array of `array` values not included in the other given arrays.
+- `entries`: lodash-compatible `entries`.
+- `eq`: Performs a SameValueZero comparison between two values to determine if they are equivalent.
+- `every`: Checks if the `predicate` function returns a truthy value for all elements in the `collection`.
+- `filter`: Creates an array of elements from a collection that satisfy a given predicate.
+- `find`: Iterates over elements of collection, return first matched element
+- `findIndex`: Finds the **index** of the first element in an array that satisfies a given predicate.
+- `findLastIndex`: Finds the **last index** of an element in an array that satisfies a given predicate.
+- `first`: Gets the first element of an array.
+- `flatten`: Flattens a nested array a single level deep.
+- `flow`: Creates a composite function that invokes the provided functions in sequence from left to right.
+- `get`: Gets the property value at path of object.
+- `groupBy`: lodash-compatible `groupBy`.
+- `gt`: lodash-compatible `gt`.
+- `has`: lodash-compatible `has` (see https://unpkg.com/browse/lodash.has@4.5.2/index.js).
+- `identity`: lodash-compatible `identity` (see https://unpkg.com/lodash@4.17.21/identity.js).
+- `includes`: lodash-compatible `includes`.
+- `isArray`: lodash-compatible `isArray` (see https://unpkg.com/lodash.isarray@4.0.0/index.js).
+- `isEmpty`: lodash-compatible `isEmpty` (see https://unpkg.com/browse/lodash.isempty@4.4.0/index.js).
+- `isEqual`: Performs a **deep equality comparison** between two values.
+- `isError`: lodash-compatible `isError`.
+- `isFunction`: Checks if the provided value is a function.
+- `isMap`: Checks if the provided value is a `Map` object.
+- `isNil`: lodash-compatible `isNil` (see https://unpkg.com/browse/lodash.isnil@4.0.0/index.js).
+- `isNull`: lodash-compatible `isNull` (see https://unpkg.com/lodash@4.17.21/isNull.js).
+- `isNumber`: lodash-compatible `isNumber`.
+- `isObject`: lodash-compatible `isObject` (see https://unpkg.com/browse/lodash.isobject@3.0.2/index.js).
+- `isPlainObject`: lodash-compatible `isPlainObject`.
+- `isSet`: Checks if the provided value is a `Set` object.
+- `isString`: lodash-compatible `isString`.
+- `isSymbol`: lodash-compatible `isSymbol`.
+- `isUndefined`: lodash-compatible `isUndefined`.
+- `join`: lodash-compatible `join`.
+- `keys`: lodash-compatible `keys` (see https://unpkg.com/browse/lodash.keys@4.2.0/index.js).
+- `last`: lodash-compatible `last`.
+- `lt`: lodash-compatible `lt`.
+- `map`: lodash-compatible `map`.
+- `mapValues`: lodash-compatible `mapValues`.
+- `memoize`: lodash-compatible `memoize`.
+- `merge`: lodash-compatible `merge`.
+- `omit`: lodash-compatible `omit`.
+- `once`: lodash-compatible `once`.
+- `pick`: lodash-compatible `pick`.
+- `pickBy`: Creates an object composed of the properties that pass a given predicate.
+- `range`: lodash-compatible `range`.
+- `repeat`: Repeats a string `n` times using an efficient algorithm.
+- `reverse`: lodash-compatible `reverse`.
+- `shuffle`: lodash-compatible `shuffle`.
+- `size`: lodash-compatible `size` (see https://unpkg.com/lodash.size@4.2.0/index.js).
+- `sleep`: lodash-compatible `sleep`.
+- `some`: Checks if **any** element in a collection satisfies a given predicate.
+- `sortBy`: Sort in ascending order
+- `sum`: lodash-compatible `sum` (see https://unpkg.com/lodash.sum).
+- `sumBy`: lodash-compatible `sumBy`.
+- `throttle`: lodash-compatible `throttle`.
+- `times`: lodash-compatible `times`.
+- `toNumber`: lodash-compatible `toNumber`.
+- `toPairs`: Converts a given object, array, or collection into an array of key-value pairs.
+- `toString`: lodash-compatible `toString`.
+- `transform`: lodash-compatible `transform`.
+- `trim`: lodash-compatible `trim`.
+- `union`: lodash-compatible `union`.
+- `uniq`: lodash-compatible `uniq`.
+- `uniqBy`: Creates a duplicate-free version of an array.
+- `uniqWith`: lodash-compatible `uniqWith`.
+- `unzip`: Transposes an array of arrays (e.g., the output of `zip`) so that the first array contains the first element of each input array, the second array contains the second element, and so on.
+- `values`: Returns an array of the values of the given object.
+- `zip`: Combines multiple arrays into a single array of grouped elements, where each group contains the elements at the same index from each input array.
+
+## Repository
+
+- Source: https://github.com/NaverPayDev/hidash
+- Issues / feature requests: https://github.com/NaverPayDev/hidash/issues
+- License: MIT
