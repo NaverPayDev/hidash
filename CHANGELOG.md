@@ -1,5 +1,11 @@
 # @naverpay/hidash
 
+## 1.1.2
+
+### Patch Changes
+
+- 2536502: chore: include llms.txt in published package
+
 ## 1.1.1
 
 ### Patch Changes
