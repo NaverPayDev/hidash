@@ -11,7 +11,8 @@
         "internal/*.js",
         "internal/*.mjs",
         "internal/*.d.ts",
-        "internal/*.d.mts"
+        "internal/*.d.mts",
+        "llms.txt"
     ],
     "exports": {
         "./package.json": "./package.json",
@@ -795,7 +796,8 @@
         "changeset-version": "changeset version && pnpm run md:fix",
         "prepublish": "node scripts/pre-build.mjs",
         "postpublish": "rimraf ./*.js ./*.mjs ./*.d.ts ./*.d.mts",
-        "generate": "node ./scripts/generate-utils.mjs"
+        "generate": "node ./scripts/generate-utils.mjs && node ./scripts/generate-llms-txt.mjs",
+        "generate:llms": "node ./scripts/generate-llms-txt.mjs"
     },
     "author": "yc.effort@navercorp.com",
     "license": "MIT",
