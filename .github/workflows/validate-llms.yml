@@ -1,0 +1,112 @@
+name: Validate and Update llms.txt
+
+on:
+    pull_request_target:
+        types: [opened, synchronize, reopened]
+        paths:
+            - 'src/**/*.ts'
+            - 'llms.txt'
+
+concurrency:
+    group: llms-${{ github.event.pull_request.number }}
+    cancel-in-progress: true
+
+permissions:
+    contents: write
+    pull-requests: write
+
+jobs:
+    validate-llms:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout PR branch
+              uses: actions/checkout@v4
+              with:
+                  ref: ${{ github.event.pull_request.head.sha }}
+                  token: ${{ secrets.ACTION_TOKEN }}
+                  fetch-depth: 0
+
+            - name: Configure git
+              run: |
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  git config user.name "github-actions[bot]"
+                  git remote set-url origin https://x-access-token:${{ secrets.ACTION_TOKEN }}@github.com/${{ github.repository }}
+
+            - name: Validate and auto-update llms.txt
+              uses: anthropics/claude-code-action@v1
+              with:
+                  anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+                  github_token: ${{ secrets.ACTION_TOKEN }}
+                  prompt: |
+                      `src/` 디렉토리의 변경사항을 기준으로 `llms.txt`의 API 섹션을 검사하고 필요하면 자동 업데이트해줘.
+
+                      ## 작업 순서
+
+                      ### 1. 변경된 함수 파악
+
+                      ```bash
+                      git diff origin/${{ github.base_ref }}...HEAD -- src/
+                      ```
+
+                      `src/` 아래 변경된 `.ts` 파일 목록 추출 (`.test.ts`, `.bench.ts` 제외).
+
+                      ### 2. 현재 함수 전체 목록 수집
+
+                      ```bash
+                      ls src/*.ts | grep -v '\.test\.' | grep -v '\.bench\.' | sed 's|src/||;s|\.ts||' | sort
+                      ```
+
+                      ### 3. llms.txt API 섹션과 비교
+
+                      `llms.txt`를 읽어 `## API` 섹션에 있는 함수 목록과 비교:
+                      - **추가된 함수**: `src/`에는 있지만 `llms.txt`에 없는 것
+                      - **삭제된 함수**: `llms.txt`에는 있지만 `src/`에 없는 것
+                      - **변경 없음**: 둘 다 동일
+
+                      ### 4. llms.txt 업데이트 (변경이 있을 때만)
+
+                      변경이 있다면 `llms.txt`의 `## API` 섹션을 수정:
+
+                      - **삭제된 함수 제거**: 해당 라인 삭제
+                      - **추가된 함수 삽입**: 알파벳 순서 유지, 아래 형식으로 추가
+                        ```
+                        - `functionName`: (함수 구현을 읽고 한 줄로 설명 작성)
+                        ```
+                        함수 설명은 `src/<functionName>.ts`를 읽어 실제 동작을 기반으로 영문으로 작성.
+                        기존 함수의 설명은 절대 수정하지 않음.
+
+                      수정 후 커밋:
+
+                      ```bash
+                      git add llms.txt
+                      git diff --cached --exit-code llms.txt || git commit -m "chore: auto-update llms.txt API section"
+                      git push origin HEAD:${{ github.head_ref }}
+                      ```
+
+                      ### 5. PR 코멘트 작성
+
+                      기존에 이 워크플로가 남긴 코멘트(`<!-- llms-validator -->` 태그 포함)가 있으면 업데이트, 없으면 새로 작성.
+
+                      **자동 업데이트 된 경우:**
+                      ```markdown
+                      <!-- llms-validator -->
+                      ### 📝 llms.txt 자동 업데이트
+
+                      API 변경사항이 감지되어 `llms.txt`를 자동으로 업데이트했습니다.
+
+                      | 구분 | 함수 |
+                      |------|------|
+                      | ➕ 추가 | `func1`, `func2` |
+                      | ➖ 제거 | `func3` |
+
+                      변경 내용을 확인하고 설명이 올바른지 검토해주세요.
+                      ```
+
+                      **변경 없는 경우:**
+                      ```markdown
+                      <!-- llms-validator -->
+                      ✅ `llms.txt` API 섹션이 최신 상태입니다.
+                      ```
+                  claude_args: |
+                      --allowedTools "Bash(git diff:*),Bash(git log:*),Bash(git add:*),Bash(git commit:*),Bash(git push:*),Bash(git config:*),Bash(ls:*),Bash(grep:*),Bash(sed:*),Read,Write,Edit"
+                      --max-turns 10
