@@ -1,5 +1,11 @@
 # @naverpay/hidash
 
+## 1.1.3
+
+### Patch Changes
+
+- d440877: fix: add `core-js-pure` to `dependencies` since the build output imports it
+
 ## 1.1.2
 
 ### Patch Changes
