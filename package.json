@@ -807,7 +807,7 @@
         "@naverpay/editorconfig": "^0.0.4",
         "@naverpay/eslint-config": "^1.0.7",
         "@naverpay/markdown-lint": "^0.0.3",
-        "@naverpay/pite": "^2.2.0",
+        "@naverpay/pite": "^2.4.0",
         "@naverpay/prettier-config": "^1.0.0",
         "@types/lodash": "^4.17.13",
         "@types/node": "^20.17.6",
@@ -828,5 +828,8 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/NaverPayDev/hidash.git"
+    },
+    "dependencies": {
+        "core-js-pure": "^3.39.0"
     }
 }
